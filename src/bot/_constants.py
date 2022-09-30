@@ -1,0 +1,1 @@
+CONFIG_PATH: str = "../config.ini"
