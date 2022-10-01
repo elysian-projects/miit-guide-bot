@@ -1,5 +1,6 @@
-# config.ini
+config.*
 build
 dist
 __pycache__
 *.egg-info
+token.*

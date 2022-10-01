@@ -1,18 +1,17 @@
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, Dispatcher, executor, types
 
-from _config import Config
+from ._config import Config
 
 
 class Application:
+    """ Класс-ядро приложения """
     __dispatcher: Dispatcher
-    __config: Config
 
     def __init__(self, config: Config) -> None:
-        bot = Bot(token = config.get("Telegram.TOKEN"))
-
-        self.__config = config
+        bot = Bot(token = config.get("Telegram", "TOKEN"))
         self.__dispatcher = Dispatcher(bot)
 
     @classmethod
-    def get_dispatcher(self) -> Dispatcher:
-        return self.__dispatcher
+    def run(self) -> None:
+        """ Запуск приложения (бота) """
+        executor.start_polling(self.__dispatcher, skip_updates = True)

@@ -1,1 +1,1 @@
-CONFIG_PATH: str = "../config.ini"
+CONFIG_PATH: str = "config.ini"

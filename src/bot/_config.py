@@ -1,18 +1,10 @@
 import configparser
 
-from core.utils.config import get_nested_path
+Config = configparser.ConfigParser
 
+def create_config(config_path) -> Config:
+    """ Create a config object from `configparser.ConfigParser` """
+    config = configparser.ConfigParser()
+    config.read(config_path)
 
-class Config:
-    __config: configparser.ConfigParser
-
-    def __init__(self, path):
-        self.__config = configparser.ConfigParser()
-        self.__config.read(path)
-
-    @classmethod
-    def get(self, field: str) -> str:
-        """ Возвращает строку из конфигурационного файла по данному полю """
-        path = get_nested_path(field)
-        print(path)
-        return self.__config[path]
+    return config
