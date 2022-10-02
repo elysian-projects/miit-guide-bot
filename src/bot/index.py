@@ -1,10 +1,9 @@
 from aiogram import types as AIOGramTypes
 
 from ._application import Application
-from ._config import create_config
-from ._constants import CONFIG_PATH
+from ._config import create_config, get_config_path
 
-config = create_config(CONFIG_PATH)
+config = create_config(get_config_path())
 bot = Application(config)
 
 async def start(message: AIOGramTypes.Message):
