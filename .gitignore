@@ -1,5 +1,5 @@
-# config.prod.ini
-# config.dev.ini
+config.prod.ini
+config.dev.ini
 build
 dist
 __pycache__
