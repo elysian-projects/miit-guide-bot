@@ -11,3 +11,9 @@ CONFIG_DEV_PATH: str = "config.dev.ini"
 # True - режим продакшн
 # False - режим разработки
 IS_PRODUCTION = False # Изменить ключ, чтобы переключаться между режимами
+
+
+""" Наборы пользовательских команд """
+
+START_CMD: list[str] = ["start", "hub"]
+ECHO_CMD: list[None] = []

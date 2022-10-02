@@ -1,35 +1,39 @@
-from aiogram import types as AIOGramTypes
-
-from ._application import Application
+from ._application import AIOGramTypes, Application
 from ._config import create_config, get_config_path
+from ._constants import ECHO_CMD, START_CMD
+from .utils.command_handler import get_unknown_command_reply
+
+# Инициализация ключевых сущностей
 
 config = create_config(get_config_path())
 bot = Application(config)
 
-async def start(message: AIOGramTypes.Message):
-    markup = bot.create_keyboard_markup(list = ["LeftButton", "RightButton"], resize_keyboard = False)
+# Асинхронные функции, отвечающие за приём сообщений
 
-    await message.reply("Hi!", reply_markup = markup)
+async def start(message: AIOGramTypes.Message):
+    markup = bot.create_menu_keyboard(
+        items = ["LeftButton", "RightButton"],
+        resize_keyboard = True,
+        one_time_keyboard = True
+    )
+
+    await message.reply("Привет!", reply_markup = markup)
 
 async def text_handler(message: AIOGramTypes.Message):
     message_reply = ""
 
-    if(message.chat.type == "private"):
-        if(message.text == "LeftButton"):
-            message_reply = "Left button"
-        elif(message.text == "RightButton"):
-            message_reply = "Right button"
+    # Неизвестная команда
+    message_reply = message_reply if len(message_reply) != 0 else get_unknown_command_reply(message.text)
 
-    if(message_reply == ""):
-        message_reply = get_unknown_command_reply(message)
-
+    # Отправка сообщения
     await message.answer(message_reply)
 
-def get_unknown_command_reply(message: AIOGramTypes.Message) -> str:
-    return f"Не удалось распознать команду {message.text}! Попробуйте команду /help, чтобы узнать, какие команды поддерживаются."
+# Подписка на события получения определённых команд
 
-bot.on(command = ["start", "hub"], handler = start)
-bot.on(command = [], handler = text_handler)
+bot.on(command = START_CMD, handler = start)
+bot.on(command = ECHO_CMD, handler = text_handler)
+
+# Главная функция, запускающая бота
 
 def main():
     bot.run()
