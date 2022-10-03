@@ -17,3 +17,7 @@ IS_PRODUCTION = False # Изменить ключ, чтобы переключа
 
 START_CMD: list[str] = ["start", "hub"]
 ECHO_CMD: list[None] = []
+
+""" Значения кнопок """
+CANT_FIND = "Не могу найти"
+FOUND = "Нашёл"
