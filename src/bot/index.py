@@ -11,13 +11,11 @@ bot = Application(config)
 # Асинхронные функции, отвечающие за приём сообщений
 
 async def start(message: AIOGramTypes.Message):
-    markup = bot.create_menu_keyboard(
-        items = ["LeftButton", "RightButton"],
-        resize_keyboard = True,
-        one_time_keyboard = True
+    await bot.send_photo(
+        message = message,
+        caption = "Добро пожаловать в гида по РУТ(МИИТ)!",
+        photo = "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159"
     )
-
-    await message.reply("Привет!", reply_markup = markup)
 
 async def text_handler(message: AIOGramTypes.Message):
     message_reply = ""
