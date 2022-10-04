@@ -8,4 +8,4 @@ touch token.txt
 
 printf "[Telegram]\nTOKEN = " > config.prod.ini
 printf "[Telegram]\nTOKEN = " > config.dev.ini
-printf "В этом файле можно хранить тестовый токен бота. Файл не учитывается токеном" > token.txt
+printf "This file is created in order to store your local TOKEN. The file is not visible for git." > token.txt
