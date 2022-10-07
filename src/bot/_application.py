@@ -3,7 +3,9 @@ from typing import Any, Awaitable, Coroutine, List
 from aiogram import Bot, Dispatcher, executor
 from aiogram import types as AIOGramTypes
 
-from ._config import Config
+from .types.location import Location
+from .utils.config import Config
+from .utils.state_manager import StateManager
 
 
 class Application:
@@ -13,6 +15,7 @@ class Application:
     простыми методами, чтобы ускорить разработку основной логики приложения.
     """
 
+    __state: StateManager
     __dispatcher: Dispatcher
     __bot: Bot
 
@@ -55,42 +58,29 @@ class Application:
         async def call_handler(message: AIOGramTypes.Message):
             await handler(message)
 
-    def create_menu_keyboard(
+    async def send_message(
         self,
-        items: List[str] = [],
-        resize_keyboard: bool or None = None,
-        one_time_keyboard: bool or None = None,
-        input_field_placeholder: Any or None = None,
-        selective: bool or None = None,
-    ) -> AIOGramTypes.ReplyKeyboardMarkup:
+        text: str,
+        message: AIOGramTypes.Message,
+        reply: bool = False,
+        reply_markup: AIOGramTypes.InlineKeyboardMarkup | AIOGramTypes.ReplyKeyboardMarkup = None
+    ) -> None:
         """
-        Создаёт клавиатуру в меню (около поля ввода)
+        Отправляет сообщения пользователю, возможно добавление markup'ов
 
-        @param items - массив строк, которые будут отображаться в виде кнопок
-        @param resize_keyboard - параметр, выставляющий, нужно ли менять размер кнопок `по вертикали`
-        @param one_time_keyboard - параметр, скрывающий клавиатуру после первого нажатия на кнопку
-        @param input_field_placeholder - строка, которая будет отображаться в поле ввода после появления кнопок
-        @param selective - показать клавиатуру конкретным типам пользователей
-
-        @see https://core.telegram.org/bots/api#replykeyboardmarkup
+        :param text: текст сообщения, которое будет отправлено пользователю
+        :param message: стандартный объект обработчика типа `AIOGramTypes.Message`
+        :param reply: флаг, обозначающий, нужно ли отвечать на сообщение пользователя, или отправить ответ без привязки
+        :param reply_markup: клавиатура
         """
 
-        markup = AIOGramTypes.ReplyKeyboardMarkup(
-            resize_keyboard = resize_keyboard,
-            one_time_keyboard = one_time_keyboard,
-            input_field_placeholder = input_field_placeholder,
-            selective = selective,
-        )
+        function = message.answer if reply else message.reply
 
-        for button_text in items:
-            keyboard_button = AIOGramTypes.KeyboardButton(button_text)
-            markup.add(keyboard_button)
-
-        return markup
+        await function(text = text, reply_markup = reply_markup)
 
     async def send_photo(
         self,
-        message: AIOGramTypes.Message,
+        chat_id: str,
         photo: AIOGramTypes.InputFile | str,
         caption: str | None = None,
         parse_mode: str | None = None,
@@ -117,7 +107,7 @@ class Application:
         """
 
         await self.__bot.send_photo(
-            chat_id = message.chat.id,
+            chat_id = chat_id,
             photo = photo,
             caption = caption,
             parse_mode = parse_mode,
@@ -127,3 +117,9 @@ class Application:
             allow_sending_without_reply = allow_sending_without_reply,
             reply_markup = reply_markup
         )
+
+    def is_location_chosen(self, chat_type: str) -> bool:
+        return self.__is_private_message(chat_type) and self.__state.get_location() != Location.UNKNOWN
+
+    def __is_private_message(chat_type: str) -> bool:
+        return chat_type == "private"
