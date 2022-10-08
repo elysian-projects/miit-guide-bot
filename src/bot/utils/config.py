@@ -1,11 +1,12 @@
 import configparser
 
-from ._constants import CONFIG_DEV_PATH, CONFIG_PROD_PATH, IS_PRODUCTION
+from ..constants.config import CONFIG_DEV_PATH, CONFIG_PROD_PATH
+from ..env import IS_PRODUCTION
 
 Config = configparser.ConfigParser
 
 def create_config(config_path) -> Config:
-    """ Create a config object from `configparser.ConfigParser` """
+    """ Создаёт объект конфига из `configparser.ConfigParser` """
     config = configparser.ConfigParser()
     config.read(config_path)
 
