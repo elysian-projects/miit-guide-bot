@@ -1,3 +1,5 @@
 from typing import List
 
-AVAILABLE_LOCATIONS: List[str] = ["Улица", "Корпус 1"]
+from ..types.location import Location
+
+AVAILABLE_LOCATIONS: List[str] = [str(location) for location in Location if location != Location.UNKNOWN]

@@ -1,7 +1,8 @@
-from enum import Enum
+from .external import Enumerable, unique
 
 
-class Location(Enum):
+@unique
+class Location(Enumerable):
     UNKNOWN = "unknown"
-    STREET = "street"
-    BUILDING_1 = "building_1"
+    STREET = "Улица"
+    BUILDING_1 = "Корпус 1"
