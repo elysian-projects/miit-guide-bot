@@ -1,0 +1,16 @@
+{
+    "locations": {
+        "street": [
+            {
+                "name": "Вечный студент",
+                "description": "Описание вечного студента",
+                "picture": "/static/images/street/1.jpg"
+            },
+            {
+                "name": "Памятник Образцова",
+                "description": "Описание памятника Образцова",
+                "picture": "/static/images/street/2.jpg"
+            }
+        ]
+    }
+}

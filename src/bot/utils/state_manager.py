@@ -2,12 +2,12 @@ from ..types.location import Location
 
 
 class StateManager:
-    __location: Location
+    __location: str
     __current_step: int
     __steps: int
 
     def __init__(self):
-        self.__location = Location.UNKNOWN
+        self.__location = Location["unknown"]["value"]
         self.__current_step = 0
         self.__steps = 0
 
@@ -22,13 +22,13 @@ class StateManager:
         self.__current_step = (self.__current_step + 1) % self.__steps
 
     def is_location_chosen(self) -> bool:
-        return self.__location != Location.UNKNOWN
+        return self.__location != Location["unknown"]["value"]
 
     def is_location_available(self, location: str) -> bool:
         return location in Location
 
     def reset_data(self) -> None:
-        self.__location = Location.UNKNOWN
+        self.__location = Location["unknown"]["value"]
         self.__current_step = 0
         self.__steps = 0
 

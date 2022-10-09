@@ -1,8 +1,14 @@
-from .external import Enumerable, unique
-
-
-@unique
-class Location(Enumerable):
-    UNKNOWN = "unknown"
-    STREET = "Улица"
-    BUILDING_1 = "Корпус 1"
+Location = {
+    "unknown": {
+        "label": "unknown",
+        "value": "unknown"
+    },
+    "street": {
+        "label": "Улица",
+        "value": "street"
+    },
+    "building_1": {
+        "label": "Корпус 1",
+        "value": "building_1"
+    }
+}

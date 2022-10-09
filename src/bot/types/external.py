@@ -5,8 +5,11 @@ from aiogram import types as AIOGramTypes
 
 
 class Enumerable(Enum):
-    def __getitem__(self, name) -> Any:
-        return format(self[name])
+    def __get__(self, _, __) -> Any:
+        return format(self.value)
+
+    def __getitem__(self) -> str:
+        return format(self.value)
 
     def __str__(self) -> str:
         return format(self.value)

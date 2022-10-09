@@ -2,13 +2,15 @@ from ._application import AIOGramTypes, Application
 from .constants.locations import AVAILABLE_LOCATIONS
 from .constants.replies import *
 from .types.buttons import Button
+from .types.location import Location
 from .utils.config import create_config, get_config_path
+from .utils.database import Database
 from .utils.keyboard import create_inline_keyboard, create_menu_keyboard
 from .utils.location import *
 
 config = create_config(get_config_path())
 bot = Application(config)
-
+database = Database()
 
 async def start(message: AIOGramTypes.Message):
     inline_keyboard = create_inline_keyboard(AVAILABLE_LOCATIONS)
@@ -58,11 +60,15 @@ async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
             ):
                 menu_keyboard = create_menu_keyboard(["✅ Да!", "❌ Нет, вернуться в меню"], resize_keyboard = True)
 
-                bot.state.set_location(message)
+                location = Location[format_location_for_database(message)]["value"]
+
+                bot.state.set_location(location)
+
+                data = database.get_location(location = location)
 
                 await bot.send_message(
                     chat_id = call.message.chat.id,
-                    text = f'Начать экскурсию по локации "{str(message)}"?',
+                    text = data,
                     reply_markup = menu_keyboard
                 )
 
