@@ -11,6 +11,18 @@
                 "description": "Описание памятника Образцова",
                 "picture": "/static/images/street/2.jpg"
             }
+        ],
+        "building_1": [
+            {
+                "name": "Информация 1",
+                "description": "Описание 1",
+                "picture": "/static/images/street/1.jpg"
+            },
+            {
+                "name": "Информация 2",
+                "description": "Описание 2",
+                "picture": "/static/images/street/2.jpg"
+            }
         ]
     }
 }

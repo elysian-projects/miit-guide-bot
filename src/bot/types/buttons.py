@@ -8,3 +8,5 @@ class Button(Enumerable):
     NEXT = "Далее"
     CANNOT_FIND = "Не могу найти"
     FOUND = "На месте"
+    YES = "✅ Да!"
+    NO_BACK_TO_HUB = "❌ Нет, вернуться в меню"

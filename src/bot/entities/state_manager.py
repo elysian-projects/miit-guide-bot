@@ -1,4 +1,5 @@
 from ..types.location import Location
+from ..utils.location import is_valid_location
 
 
 class StateManager:
@@ -15,6 +16,9 @@ class StateManager:
         return self.__location
 
     def set_location(self, location: str) -> None:
+        if(not is_valid_location(location)):
+            raise "Incorrect location was given!"
+
         self.__location = location
         self.__steps = self.__get_steps_amount(location = location)
 

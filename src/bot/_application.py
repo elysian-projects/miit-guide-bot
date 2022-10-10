@@ -3,9 +3,9 @@ from typing import Awaitable, Callable, List
 from aiogram import Bot, Dispatcher, executor
 from aiogram import types as AIOGramTypes
 
+from .entities.state_manager import StateManager
 from .types.message import ParseMode
 from .utils.config import Config
-from .utils.state_manager import StateManager
 
 
 class Application:
