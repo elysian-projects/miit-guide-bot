@@ -7,7 +7,7 @@ class Database:
     __data: str
 
     def __init__(self):
-        with open("./static/data.json", "r") as file:
+        with open("./static/data.json", "r", encoding = 'UTF-8') as file:
             self.__data = file.read()
 
     def connect(self) -> None:
