@@ -72,7 +72,7 @@ async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
 
 
 async def excursion_loop(message: AIOGramTypes.Message):
-    poi_list = database.get_location(bot.state.get_location())
+    poi_list = database.get_data_from_location(bot.state.get_location())
     print("Start excursion!")
 
 

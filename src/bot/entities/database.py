@@ -13,11 +13,11 @@ class Database:
     def connect(self) -> None:
         pass
 
-    def get_location(self, location: str) -> List[object] | None:
+    def get_data_from_location(self, location: str) -> List[object]:
         data = parse_response(self.__data)
 
         for _location in data["locations"]:
             if(location == _location):
                 return data["locations"][_location]
 
-        return None
+        return []
