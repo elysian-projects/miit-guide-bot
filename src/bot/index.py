@@ -11,6 +11,9 @@ config = create_config(get_config_path())
 bot = Application(config)
 database = Database()
 
+count_monuments = 0
+length_poi_list = 0
+
 
 async def start(message: AIOGramTypes.Message):
     bot.state.reset_data()
@@ -35,8 +38,22 @@ async def text_handler(message: AIOGramTypes.Message):
         await start(message)
         return
 
-    if(message.text == Button.YES):
-        await excursion_loop(message)
+    global count_monuments
+    global length_poi_list
+
+    if (message.text == Button.YES):
+        count_monuments = 0
+        await excursion_loop(message, count_monuments)
+        count_monuments += 1
+        return
+
+    if (message.text == Button.NEXT) and (count_monuments <= (length_poi_list - 1)):
+        await excursion_loop(message,count_monuments)
+        count_monuments += 1
+        return
+
+    if (message.text == Button.NEXT) and (not(count_monuments <= (length_poi_list - 1))):
+        await the_end(message)
         return
 
     await bot.send_message(chat_id = message.chat.id, text = Reply.UNKNOWN_COMMAND)
@@ -71,9 +88,35 @@ async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
         print(repr(e))
 
 
-async def excursion_loop(message: AIOGramTypes.Message):
+async def excursion_loop(message: AIOGramTypes.Message, count):
     poi_list = database.get_data_from_location(bot.state.get_location())
-    print("Start excursion!")
+
+    if (count == 0):
+        print("Start excursion!")
+
+        global length_poi_list
+        length_poi_list = len(poi_list)
+
+    await bot.send_message_with_photo(
+        chat_id = message.chat.id,
+        photo = AIOGramTypes.InputFile(poi_list[count]['picture']),
+        text = poi_list[count]["name"],
+        reply_markup = remove_keyboard()
+    )
+
+    await bot.send_message(
+        chat_id = message.chat.id,
+        text = poi_list[count]["description"],
+        reply_markup = Keyboard.MENU_NEXT__TO_HUB
+    )
+
+async def the_end(message: AIOGramTypes.Message):
+
+    await bot.send_message(
+        chat_id = message.chat.id,
+        text = Reply.END_OF_TOUR,
+        reply_markup=Keyboard.MENU_TO_HUB
+    )
 
 
 bot.add_command_handler(command = ["start", "hub"], handler = start)
