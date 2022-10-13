@@ -3,12 +3,12 @@ from ..utils.location import format_location_for_database, is_valid_location
 
 
 class StateManager:
-    __location: str
+    __location: str | None
     __current_step: int
 
 
     def __init__(self):
-        self.__location = Location["unknown"]["value"]
+        self.__location = None
         self.__current_step = 0
 
 
@@ -32,9 +32,9 @@ class StateManager:
 
 
     def is_location_chosen(self) -> bool:
-        return self.__location != Location["unknown"]["value"]
+        return self.__location != None
 
 
     def reset_data(self) -> None:
-        self.__location = Location["unknown"]["value"]
+        self.__location = None
         self.__current_step = 0
