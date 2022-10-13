@@ -37,6 +37,6 @@ def test__reset_data():
 
     state_manager.reset_data()
 
-    assert state_manager.get_location() == "unknown"
+    assert state_manager.get_location() == None
     assert state_manager.is_location_chosen() == False
     assert state_manager.get_current_step() == 0
