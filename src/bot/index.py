@@ -11,9 +11,6 @@ config = create_config(get_config_path())
 bot = Application(config)
 database = Database()
 
-count_monuments = 0
-length_poi_list = 0
-
 
 async def start(message: AIOGramTypes.Message):
     bot.state.reset_data()
@@ -38,22 +35,17 @@ async def text_handler(message: AIOGramTypes.Message):
         await start(message)
         return
 
-    global count_monuments
-    global length_poi_list
-
-    if (message.text == Button.YES):
-        count_monuments = 0
-        await excursion_loop(message, count_monuments)
-        count_monuments += 1
+    if(message.text == Button.YES):
+        await excursion_loop(message)
         return
 
-    if (message.text == Button.NEXT) and (count_monuments <= (length_poi_list - 1)):
-        await excursion_loop(message,count_monuments)
-        count_monuments += 1
-        return
+    if(message.text == Button.NEXT):
+        bot.state.next_step()
+        await excursion_loop(message)
 
-    if (message.text == Button.NEXT) and (not(count_monuments <= (length_poi_list - 1))):
-        await the_end(message)
+        if(bot.state.is_end()):
+            await end_of_excursion(message)
+
         return
 
     await bot.send_message(chat_id = message.chat.id, text = Reply.UNKNOWN_COMMAND)
@@ -88,34 +80,29 @@ async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
         print(repr(e))
 
 
-async def excursion_loop(message: AIOGramTypes.Message, count):
-    poi_list = database.get_data_from_location(bot.state.get_location())
-
-    if (count == 0):
-        print("Start excursion!")
-
-        global length_poi_list
-        length_poi_list = len(poi_list)
+async def excursion_loop(message: AIOGramTypes.Message):
+    if (bot.state.get_current_step() == 0):
+        points_list = database.get_points_list(bot.state.get_location())
+        bot.state.set_points_list(points_list)
 
     await bot.send_message_with_photo(
         chat_id = message.chat.id,
-        photo = AIOGramTypes.InputFile(poi_list[count]['picture']),
-        text = poi_list[count]["name"],
+        photo = AIOGramTypes.InputFile(bot.state.get_data_by_field("picture")),
+        text = bot.state.get_data_by_field("name"),
         reply_markup = remove_keyboard()
     )
 
     await bot.send_message(
         chat_id = message.chat.id,
-        text = poi_list[count]["description"],
+        text = bot.state.get_data_by_field("description"),
         reply_markup = Keyboard.MENU_NEXT__TO_HUB
     )
 
-async def the_end(message: AIOGramTypes.Message):
-
+async def end_of_excursion(message: AIOGramTypes.Message):
     await bot.send_message(
         chat_id = message.chat.id,
         text = Reply.END_OF_TOUR,
-        reply_markup=Keyboard.MENU_TO_HUB
+        reply_markup = Keyboard.MENU_TO_HUB
     )
 
 
