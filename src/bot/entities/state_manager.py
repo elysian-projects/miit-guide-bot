@@ -67,10 +67,6 @@ class StateManager:
     def next_step(self) -> None:
         self.__current_step += 1
 
-
-    def is_end(self) -> bool:
-        return self.get_current_step() >= self.__amount_of_points
-
         if(self.__current_step == (self.__amount_of_points - 1)):
             self.is_end = True
 
