@@ -84,16 +84,12 @@ def test__next_step():
 def test__is_end():
     state_manager = StateManager()
 
-    assert state_manager.is_end() == True
-
-    state_manager.set_points_list(["value1", "value2"])
-    assert state_manager.is_end() == False
+    state_manager.set_location("street")
+    assert state_manager.is_end == False
 
     state_manager.next_step()
-    assert state_manager.is_end() == False
-
-    state_manager.next_step()
-    assert state_manager.is_end() == True
+    assert state_manager.get_current_step() == 1
+    assert state_manager.is_end == True
 
 
 def test__is_location_chosen():
@@ -119,3 +115,5 @@ def test__reset_data():
     assert state_manager.get_current_step() == 0
     assert state_manager.get_points_list() == []
     assert len(state_manager.get_points_list()) == 0
+    assert state_manager.is_end == Falsу
+    

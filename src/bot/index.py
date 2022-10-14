@@ -43,7 +43,7 @@ async def text_handler(message: AIOGramTypes.Message):
         bot.state.next_step()
         await excursion_loop(message)
 
-        if(bot.state.is_end()):
+        if(bot.state.is_end):
             await end_of_excursion(message)
 
         return
