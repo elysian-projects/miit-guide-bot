@@ -4,6 +4,11 @@ from ..types.location import Location
 from ..utils.location import (format_location_for_database, get_location_value,
                               is_valid_location)
 
+DEFAULT_LOCATION = None
+DEFAULT_CURRENT_STEP = 0
+DEFAULT_AMOUNT_OF_POINTS = 0
+DEFAULT_POINTS_LIST = []
+DEFAULT_IS_END = False
 
 class StateManager:
     __location: str | None
@@ -11,12 +16,15 @@ class StateManager:
     __amount_of_points: int
     __points_list: list[list[object]]
 
+    is_end: bool
+
 
     def __init__(self):
-        self.__location = None
-        self.__current_step = 0
-        self.__amount_of_points = 0
-        self.__points_list = []
+        self.__location = DEFAULT_LOCATION
+        self.__current_step = DEFAULT_CURRENT_STEP
+        self.__amount_of_points = DEFAULT_AMOUNT_OF_POINTS
+        self.__points_list = DEFAULT_POINTS_LIST
+        self.is_end = DEFAULT_IS_END
 
 
     def get_location(self) -> str:
@@ -60,11 +68,10 @@ class StateManager:
 
 
     def next_step(self) -> None:
-        self.__current_step += 1
+        self.__current_step = self.__current_step + 1
 
-
-    def is_end(self) -> bool:
-        return self.get_current_step() >= self.__amount_of_points
+        if(self.__current_step == (self.__amount_of_points - 1)):
+            self.is_end = True
 
 
     def is_location_chosen(self) -> bool:
@@ -72,7 +79,8 @@ class StateManager:
 
 
     def reset_data(self) -> None:
-        self.__location = None
-        self.__current_step = 0
-        self.__amount_of_points = 0
-        self.__points_list = []
+        self.__location = DEFAULT_LOCATION
+        self.__current_step = DEFAULT_CURRENT_STEP
+        self.__amount_of_points = DEFAULT_AMOUNT_OF_POINTS
+        self.__points_list = DEFAULT_POINTS_LIST
+        self.is_end = DEFAULT_IS_END
