@@ -16,9 +16,6 @@ class StateManager:
     __amount_of_points: int
     __points_list: list[list[object]]
 
-    is_end: bool
-
-
     def __init__(self):
         self.__location = DEFAULT_LOCATION
         self.__current_step = DEFAULT_CURRENT_STEP
@@ -68,7 +65,11 @@ class StateManager:
 
 
     def next_step(self) -> None:
-        self.__current_step = self.__current_step + 1
+        self.__current_step += 1
+
+
+    def is_end(self) -> bool:
+        return self.get_current_step() >= self.__amount_of_points
 
         if(self.__current_step == (self.__amount_of_points - 1)):
             self.is_end = True
@@ -84,3 +85,4 @@ class StateManager:
         self.__amount_of_points = DEFAULT_AMOUNT_OF_POINTS
         self.__points_list = DEFAULT_POINTS_LIST
         self.is_end = DEFAULT_IS_END
+        self.__points_list = []
