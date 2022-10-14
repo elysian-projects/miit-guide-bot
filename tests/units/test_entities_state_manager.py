@@ -115,5 +115,4 @@ def test__reset_data():
     assert state_manager.get_current_step() == 0
     assert state_manager.get_points_list() == []
     assert len(state_manager.get_points_list()) == 0
-    assert state_manager.is_end == Falsу
-    
+    assert state_manager.is_end == False
