@@ -1,8 +1,4 @@
 Location = {
-    "unknown": {
-        "label": "unknown",
-        "value": "unknown"
-    },
     "street": {
         "label": "Улица",
         "value": "street"

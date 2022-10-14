@@ -13,7 +13,7 @@ class Database:
     def connect(self) -> None:
         pass
 
-    def get_data_from_location(self, location: str) -> List[object]:
+    def get_points_list(self, location: str) -> List[object]:
         data = parse_response(self.__data)
 
         for _location in data["locations"]:

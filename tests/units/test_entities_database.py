@@ -4,17 +4,17 @@ from src.bot.entities.database import Database
 def test__get_location():
     database = Database()
 
-    data = database.get_data_from_location("street")
+    data = database.get_points_list("street")
 
     assert type(data) == list
     assert len(data) != 0
 
-    data = database.get_data_from_location("building_1")
+    data = database.get_points_list("building_1")
 
     assert type(data) == list
     assert len(data) != 0
 
-    data = database.get_data_from_location("building1")
+    data = database.get_points_list("building1")
 
     assert type(data) == list
     assert len(data) == 0
