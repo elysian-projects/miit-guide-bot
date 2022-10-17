@@ -1,14 +1,10 @@
 from typing import Any
 
+from ..constants.state import *
 from ..types.location import Location
 from ..utils.location import (format_location_for_database, get_location_value,
                               is_valid_location)
 
-DEFAULT_LOCATION = None
-DEFAULT_CURRENT_STEP = 0
-DEFAULT_AMOUNT_OF_POINTS = 0
-DEFAULT_POINTS_LIST = []
-DEFAULT_IS_END = False
 
 class StateManager:
     __location: str | None
