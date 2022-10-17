@@ -1,5 +1,4 @@
-from ..constants.locations import AVAILABLE_LOCATIONS
-from ..types.location import Location
+from ..constants.locations import AVAILABLE_LOCATIONS, Location
 
 
 def get_location_label(location: str) -> str | None:

@@ -1,6 +1,16 @@
 from typing import List
 
-from ..types.location import Location
+Location = {
+    "street": {
+        "label": "Улица",
+        "value": "street"
+    },
+    "building_1": {
+        "label": "Корпус 1",
+        "value": "building_1"
+    }
+}
+
 
 AVAILABLE_LOCATIONS: List[str] = [Location[location] for location in Location]
 
