@@ -3,12 +3,10 @@ from .constants.keyboard import Keyboard
 from .constants.replies import Reply
 from .entities.database import Database
 from .types.buttons import Button
-from .utils.config import create_config, get_config_path
 from .utils.keyboard import *
 from .utils.location import *
 
-config = create_config(get_config_path())
-bot = Application(config)
+bot = Application()
 database = Database()
 
 
