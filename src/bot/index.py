@@ -3,6 +3,7 @@ from .constants.keyboard import Keyboard
 from .constants.replies import Reply
 from .entities.database import Database
 from .types.buttons import Button
+from .types.state import StateField
 from .utils.keyboard import *
 from .utils.location import *
 
@@ -79,20 +80,20 @@ async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
 
 
 async def excursion_loop(message: AIOGramTypes.Message):
-    if (bot.state.get_current_step() == 0):
-        points_list = database.get_points_list(bot.state.get_location())
+    if (bot.state.get(StateField.CURRENT_STEP) == 0):
+        points_list = database.get_points_list(bot.state.get(StateField.LOCATION))
         bot.state.set_points_list(points_list)
 
     await bot.send_message_with_photo(
         chat_id = message.chat.id,
-        photo = AIOGramTypes.InputFile(bot.state.get_data_by_field("picture")),
-        text = bot.state.get_data_by_field("name"),
+        photo = AIOGramTypes.InputFile(bot.state.get_current_step_data("picture")),
+        text = bot.state.get_current_step_data("name"),
         reply_markup = remove_keyboard()
     )
 
     await bot.send_message(
         chat_id = message.chat.id,
-        text = bot.state.get_data_by_field("description"),
+        text = bot.state.get_current_step_data("description"),
         reply_markup = Keyboard.MENU_NEXT__TO_HUB
     )
 
