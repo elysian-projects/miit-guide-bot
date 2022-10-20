@@ -3,9 +3,9 @@ from typing import Awaitable, Callable, List
 from aiogram import Bot, Dispatcher, executor
 from aiogram import types as AIOGramTypes
 
+from .entities.state_manager import StateManager
 from .types.message import ParseMode
-from .utils.config import Config
-from .utils.state_manager import StateManager
+from .utils.config import Config, create_config, get_config_path
 
 
 class Application:
@@ -20,7 +20,9 @@ class Application:
 
     state: StateManager
 
-    def __init__(self, config: Config) -> None:
+    def __init__(self) -> None:
+        config = create_config(get_config_path())
+
         bot = Bot(token = config.get("Telegram", "TOKEN"))
         dispatcher = Dispatcher(bot)
 

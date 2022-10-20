@@ -1,5 +1,18 @@
 from typing import List
 
-from ..types.location import Location
+Location = {
+    "street": {
+        "label": "Улица",
+        "value": "street"
+    },
+    "building_1": {
+        "label": "Корпус 1",
+        "value": "building_1"
+    }
+}
 
-AVAILABLE_LOCATIONS: List[str] = [str(location) for location in Location if location != Location.UNKNOWN]
+
+AVAILABLE_LOCATIONS: List[str] = [Location[location] for location in Location]
+
+LOCATION_LABELS = [_location["label"] for _location in AVAILABLE_LOCATIONS]
+LOCATION_VALUES = [_location["value"] for _location in AVAILABLE_LOCATIONS]

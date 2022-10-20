@@ -1,0 +1,28 @@
+{
+    "locations": {
+        "street": [
+            {
+                "name": "Вечный студент",
+                "description": "Описание вечного студента",
+                "picture": "./static/images/street/1.jpg"
+            },
+            {
+                "name": "Памятник Образцова",
+                "description": "Описание памятника Образцова",
+                "picture": "./static/images/street/2.jpg"
+            }
+        ],
+        "building_1": [
+            {
+                "name": "Памятник Николаю II",
+                "description": "Описание 1",
+                "picture": "./static/images/building_1/1.jpg"
+            },
+            {
+                "name": "Бюст заместителя министра путей сообщения Н. П. Петрова",
+                "description": "Описание 2",
+                "picture": "./static/images/building_1/2.jpg"
+            }
+        ]
+    }
+}

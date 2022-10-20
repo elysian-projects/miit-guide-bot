@@ -54,3 +54,10 @@ def create_inline_keyboard(
         markup.add(inline_button)
 
     return markup
+
+def remove_keyboard() -> AIOGramTypes.ReplyKeyboardRemove:
+    """
+    Создаёт `ReplyKeyboardRemove` - инструкцию, которая удаляет `menu` клавиатуру
+    """
+
+    return AIOGramTypes.ReplyKeyboardRemove()
