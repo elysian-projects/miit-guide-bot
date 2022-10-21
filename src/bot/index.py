@@ -97,6 +97,18 @@ async def excursion_loop(message: AIOGramTypes.Message):
         reply_markup = Keyboard.MENU_NEXT__TO_HUB
     )
 
+    point_links = bot.state.get_current_step_data("links")
+
+    if(len(point_links) == 0):
+        return
+
+    extra_links = Reply.EXTRA_LINKS + ", ".join(point_links)
+
+    await bot.send_message(
+        chat_id = message.chat.id,
+        text = extra_links
+    )
+
 async def end_of_excursion(message: AIOGramTypes.Message):
     await bot.send_message(
         chat_id = message.chat.id,
