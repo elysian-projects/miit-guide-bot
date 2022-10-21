@@ -66,10 +66,11 @@ class Application:
         chat_id: int,
         text: str,
         disable_notification: bool | None = None,
-        protected_content: bool | None = None,
+        protect_content: bool | None = None,
         reply_to_message_id: int | None = None,
         allow_sending_without_reply: bool | None = None,
         parse_mode: ParseMode = ParseMode.MARKDOWN,
+        disable_web_page_preview: bool = False,
         reply_markup: AIOGramTypes.InlineKeyboardButton |
                       AIOGramTypes.ReplyKeyboardMarkup |
                       AIOGramTypes.ReplyKeyboardRemove |
@@ -87,6 +88,7 @@ class Application:
         :param allow_sending_without_reply: отправить, даже если нет сообщения, на которое нужно ответить
         :param parse_mode: Markdown/HTML
         :param reply_markup: клавиатура
+        :param disable_web_page_preview: отключение превью ссылок
 
         @see https://core.telegram.org/bots/api#sendmessage
         """
@@ -95,11 +97,12 @@ class Application:
             chat_id = chat_id,
             text = text,
             disable_notification = disable_notification,
-            protect_content = protected_content,
+            protect_content = protect_content,
             reply_to_message_id = reply_to_message_id,
             allow_sending_without_reply = allow_sending_without_reply,
             parse_mode = parse_mode,
             reply_markup = reply_markup,
+            disable_web_page_preview = disable_web_page_preview
         )
 
     async def send_message_with_photo(

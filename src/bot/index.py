@@ -106,7 +106,8 @@ async def excursion_loop(message: AIOGramTypes.Message):
 
     await bot.send_message(
         chat_id = message.chat.id,
-        text = extra_links
+        text = extra_links,
+        disable_web_page_preview = True
     )
 
 async def end_of_excursion(message: AIOGramTypes.Message):
