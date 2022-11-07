@@ -1,0 +1,10 @@
+config.prod.ini
+config.dev.ini
+build
+dist
+__pycache__
+*.egg-info
+token.*
+.idea
+.vscode
+.venv
