@@ -108,46 +108,51 @@ class Application:
     async def send_message_with_photo(
         self,
         chat_id: int,
-        photo: str,
+        media: str | list[str],
         text: str | None = None,
         disable_notification: bool | None = None,
         protect_content: bool | None = None,
         reply_to_message_id: int | None = None,
         allow_sending_without_reply: bool | None = None,
-        parse_mode: str = ParseMode.MARKDOWN,
-        reply_markup: AIOGramTypes.InlineKeyboardButton |
-                      AIOGramTypes.ReplyKeyboardMarkup |
-                      AIOGramTypes.ReplyKeyboardRemove |
-                      AIOGramTypes.ForceReply |
-                      None = None
-    ) -> None:
+       ) -> None:
         """
         (Асинхронный метод) Отправляет картинки пользователю, возможно добавление клавиатуры
 
         :param chat_id: id чата, куда нужно отправить сообщение
-        :param photo: строковый путь до картинки (абсолютный)
+        :param media: массив JSON, описывающий фото и видео для отправки
         :param text: текст, который будет отправлен вместе с картинкой
         :param disable_notification: отправить сообщение в "бесшумном" режиме
         :param protect_content: запретить пересылать и скачивать отправленный контент
         :param reply_to_message_id: id оригинального сообщения, если команда является ответом
         :param allow_sending_without_reply: отправить, даже если нет сообщения, на которое нужно ответить
-        :param parse_mode: Markdown/HTML
-        :param reply_markup: клавиатура, которая будет отправлена вместе с сообщением
 
-        @see https://core.telegram.org/bots/api#sendphoto
+        @see https://core.telegram.org/bots/api#sendmediagroup
         """
 
-        await self.__bot.send_photo(
-            chat_id = chat_id,
-            photo = photo,
-            caption = text,
-            parse_mode = parse_mode,
-            disable_notification = disable_notification,
-            protect_content = protect_content,
-            reply_to_message_id = reply_to_message_id,
-            allow_sending_without_reply = allow_sending_without_reply,
-            reply_markup = reply_markup,
-        )
+        try:
+            media_group = []
+            count = 0
+            if type(media) == str:
+                media = [media]
+            media = [x for x in media if x]
+
+            for i in media:
+                if "https://" in i:
+                    media_group.append(AIOGramTypes.InputMediaPhoto(i, caption = text if count == 0 else ""))
+                else:
+                    media_group.append(AIOGramTypes.InputMediaPhoto(open(i, 'rb'), caption = text if count == 0 else ""))
+                count += 1
+
+            await self.__bot.send_media_group(
+                chat_id = chat_id,
+                media = media_group,
+                disable_notification = disable_notification,
+                protect_content = protect_content,
+                reply_to_message_id = reply_to_message_id,
+                allow_sending_without_reply = allow_sending_without_reply
+            )
+        except Exception as e:
+            print(repr(e))
 
     def is_private_message(chat_type: str) -> bool:
         return chat_type == "private"
