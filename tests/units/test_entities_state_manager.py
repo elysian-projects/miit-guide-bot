@@ -1,4 +1,5 @@
 import pytest
+
 from src.bot.constants.state import *
 from src.bot.entities.state_manager import StateField, StateManager
 
@@ -113,6 +114,8 @@ def test__is_end():
     state_manager = StateManager()
 
     state_manager.set_location("street")
+    state_manager.set_points_list(["point1", "point2"])
+
     assert state_manager.is_end == False
 
     state_manager.next_step()

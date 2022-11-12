@@ -1,10 +1,8 @@
 from typing import Any
 
-from ..constants.locations import Location
 from ..constants.state import *
 from ..types.state import StateField
-from ..utils.location import (format_location_for_database, get_location_value,
-                              is_valid_location)
+from ..utils.location import format_location_for_database, is_valid_location
 
 
 class StateManager:
@@ -28,7 +26,6 @@ class StateManager:
             raise TypeError("Incorrect location was given!")
 
         self.__location = format_location_for_database(location)
-        self.__max_steps = len(Location[get_location_value(location)])
 
 
     def set_points_list(self, points_list: list[Any]) -> None:
@@ -39,7 +36,7 @@ class StateManager:
     def next_step(self) -> None:
         self.__current_step += 1
 
-        if(self.get(StateField.CURRENT_STEP) == self.get(StateField.MAX_STEPS) - 1):
+        if(self.__current_step == self.__max_steps - 1):
             self.is_end = True
 
 
