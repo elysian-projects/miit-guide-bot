@@ -1,3 +1,5 @@
+from typing import List
+
 from .external import Enumerable
 
 
@@ -15,3 +17,19 @@ class Location:
 class LocationProps(Enumerable):
     value: str = "value"
     label: str = "label"
+
+class Point:
+    name: str
+    description: str
+    #TODO: исправить при внедрении функционала отправления нескольких картинок в одном сообщении - `str | List[str]`
+    picture: str
+    links: List[str]
+
+    def __init__(self, name: str, description: str, picture: str, links: List[str]):
+        self.name = name
+        self.description = description
+        self.picture = picture
+        self.links = links
+
+    def __eq__(self, __o: object) -> bool:
+        return self.__dict__ == __o.__dict__

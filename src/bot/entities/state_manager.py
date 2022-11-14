@@ -1,15 +1,16 @@
-from typing import Any
+from typing import List
 
 from ..constants.state import *
-from ..types.state import StateField
-from ..utils.location import format_location_for_database, is_valid_location
+from ..types.location import Point
+from ..utils.location import (format_location_for_database, format_point_data,
+                              is_valid_location)
 
 
 class StateManager:
     __location: str | None
     __current_step: int
     __max_steps: int
-    __points_list: list[list[object]]
+    __points_list: List[Point]
 
     is_end: bool
 
@@ -28,8 +29,8 @@ class StateManager:
         self.__location = format_location_for_database(location)
 
 
-    def set_points_list(self, points_list: list[Any]) -> None:
-        self.__points_list = points_list
+    def set_points_list(self, points_list: List[object]) -> None:
+        self.__points_list = [format_point_data(_point) for _point in points_list]
         self.__max_steps = len(points_list)
 
 
@@ -40,33 +41,31 @@ class StateManager:
             self.is_end = True
 
 
-    def get(self, field: StateField) -> str | None:
-        current_state = {
-            StateField.LOCATION: self.__location,
-            StateField.CURRENT_STEP: self.__current_step,
-            StateField.MAX_STEPS: self.__max_steps,
-            StateField.POINTS_LIST: self.__points_list,
-            StateField.IS_END: self.is_end
-        }
+    def get_location(self) -> str:
+        return self.__location
 
-        if(field in current_state):
-            return current_state[field]
+    def get_current_step(self) -> int:
+        return self.__current_step
 
-        return None
+    def get_max_steps(self) -> int:
+        return self.__max_steps
+
+    def get_points_list(self) -> List[Point]:
+        return self.__points_list
 
 
-    def get_current_step_data(self, field: str) -> str | None:
-        data = self.get(StateField.POINTS_LIST)
-        step = self.get(StateField.CURRENT_STEP)
+    def get_point_data(self) -> Point:
+        data = self.__points_list
+        step = self.__current_step
 
-        if(len(data) == 0 or step >= len(data) or not field in data[step]):
-            return None
+        if(len(data) == 0 or step >= len(data)):
+            return Point(None, None, None, [])
 
-        return data[step][field]
+        return data[step]
 
 
     def is_location_chosen(self) -> bool:
-        return self.get(StateField.LOCATION) != None
+        return self.__location != None
 
 
     def reset_data(self) -> None:

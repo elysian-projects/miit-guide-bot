@@ -3,7 +3,6 @@ from .constants.keyboard import Keyboard
 from .constants.replies import Reply
 from .entities.database import Database
 from .types.buttons import Button
-from .types.state import StateField
 from .utils.keyboard import *
 from .utils.location import *
 from .utils.message import *
@@ -81,31 +80,31 @@ async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
 
 
 async def excursion_loop(message: AIOGramTypes.Message):
-    if (bot.state.get(StateField.CURRENT_STEP) == 0):
-        points_list = database.get_points_list(bot.state.get(StateField.LOCATION))
+    if (bot.state.get_current_step() == 0):
+        points_list = database.get_points_list(bot.state.get_location())
         bot.state.set_points_list(points_list)
+
+    current_point_data = bot.state.get_point_data()
 
     await bot.send_message_with_photo(
         chat_id = message.chat.id,
-        photo = AIOGramTypes.InputFile(bot.state.get_current_step_data("picture")),
-        text = bot.state.get_current_step_data("name"),
+        photo = AIOGramTypes.InputFile(current_point_data.picture),
+        text = current_point_data.name,
         reply_markup = remove_keyboard()
     )
 
     await bot.send_message(
         chat_id = message.chat.id,
-        text = bot.state.get_current_step_data("description"),
+        text = current_point_data.description,
         reply_markup = Keyboard.MENU_NEXT__TO_HUB
     )
 
-    point_links = bot.state.get_current_step_data("links")
-
-    if(len(point_links) == 0):
+    if(len(current_point_data.links) == 0):
         return
 
     await bot.send_message(
         chat_id = message.chat.id,
-        text = f"{Reply.EXTRA_LINKS} {assemble_links_line(point_links)}",
+        text = f"{Reply.EXTRA_LINKS} {assemble_links_line(current_point_data.links)}",
         disable_web_page_preview = True
     )
 
