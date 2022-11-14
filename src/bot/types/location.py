@@ -14,9 +14,11 @@ class Location:
         self.label = label
         self.value = value
 
+
 class LocationProps(Enumerable):
     value: str = "value"
     label: str = "label"
+
 
 class Point:
     name: str
@@ -25,7 +27,7 @@ class Point:
     picture: str
     links: List[str]
 
-    def __init__(self, name: str, description: str, picture: str, links: List[str]):
+    def __init__(self, name: str = None, description: str = None, picture: str = None, links: List[str] = []):
         self.name = name
         self.description = description
         self.picture = picture

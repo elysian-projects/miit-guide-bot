@@ -59,7 +59,7 @@ class StateManager:
         step = self.__current_step
 
         if(len(data) == 0 or step >= len(data)):
-            return Point(None, None, None, [])
+            return Point()
 
         return data[step]
 
