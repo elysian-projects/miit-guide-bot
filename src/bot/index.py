@@ -6,6 +6,7 @@ from .types.buttons import Button
 from .types.state import StateField
 from .utils.keyboard import *
 from .utils.location import *
+from .utils.message import *
 
 bot = Application()
 database = Database()
@@ -102,11 +103,9 @@ async def excursion_loop(message: AIOGramTypes.Message):
     if(len(point_links) == 0):
         return
 
-    extra_links = Reply.EXTRA_LINKS + ", ".join(point_links)
-
     await bot.send_message(
         chat_id = message.chat.id,
-        text = extra_links,
+        text = f"{Reply.EXTRA_LINKS} {assemble_links_line(point_links)}",
         disable_web_page_preview = True
     )
 
