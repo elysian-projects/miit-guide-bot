@@ -73,8 +73,6 @@ def test__get():
     sample_list = [format_point_data(_point) for _point in _default_points_list]
     state_list = state_manager.get_points_list()
 
-    print(sample_list, state_list)
-
     for index in range(len(state_list)):
         assert state_list[index] == sample_list[index]
 
