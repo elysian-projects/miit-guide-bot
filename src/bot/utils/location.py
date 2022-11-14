@@ -1,3 +1,5 @@
+from typing import List
+
 from ..constants.locations import LOCATION_LABELS, LOCATION_VALUES, Locations
 from ..types.location import LocationProps, Point
 
@@ -14,7 +16,11 @@ def is_valid_location(location: str) -> bool:
         or location.strip() in LOCATION_LABELS
 
 
+#TODO: удалить к релизу
 def format_location_for_database(location: str) -> str | None:
+    """
+    :deprecated: использовать `format_point_data`
+    """
     return get_location_property(location, LocationProps.value)
 
 
@@ -30,3 +36,11 @@ def format_point_data(data: object) -> Point:
         links = data["links"] if "links" in data else []
 
         return Point(name, description, picture, links)
+
+
+def is_first_step(current_step: int) -> bool:
+    return current_step == 0
+
+
+def has_extra_links(list_array: List[str]) -> bool:
+    return len(list_array) != 0

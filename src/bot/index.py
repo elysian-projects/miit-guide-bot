@@ -80,7 +80,7 @@ async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
 
 
 async def excursion_loop(message: AIOGramTypes.Message):
-    if (bot.state.get_current_step() == 0):
+    if (is_first_step(bot.state.get_current_step())):
         points_list = database.get_points_list(bot.state.get_location())
         bot.state.set_points_list(points_list)
 
@@ -99,7 +99,7 @@ async def excursion_loop(message: AIOGramTypes.Message):
         reply_markup = Keyboard.MENU_NEXT__TO_HUB
     )
 
-    if(len(current_point_data.links) == 0):
+    if(has_extra_links(current_point_data.links)):
         return
 
     await bot.send_message(
