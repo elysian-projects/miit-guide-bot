@@ -2,10 +2,11 @@ from ._application import AIOGramTypes, Application
 from .constants.keyboard import Keyboard
 from .constants.replies import Reply
 from .entities.database import Database
+from .env import IS_PRODUCTION
 from .types.buttons import Button
-from .types.state import StateField
 from .utils.keyboard import *
 from .utils.location import *
+from .utils.message import *
 
 bot = Application()
 database = Database()
@@ -50,11 +51,34 @@ async def text_handler(message: AIOGramTypes.Message):
     await bot.send_message(chat_id = message.chat.id, text = Reply.UNKNOWN_COMMAND)
 
 
-async def get_location(message: AIOGramTypes.Message):
+async def debug__get_location(message: AIOGramTypes.Message):
     """
-    DEBUG ONLY!!! REMOVE IN PRODUCTION
+    DEBUG ONLY!!! WON'T WORK IN PRODUCTION
     """
-    await bot.send_message(chat_id = message.chat.id, text = bot.state.get_location())
+    await bot.send_message(
+        chat_id = message.chat.id,
+        text = repr(bot.state.get_location())
+    )
+
+
+async def debug__get_location_data(message: AIOGramTypes.Message):
+    """
+    DEBUG ONLY!!! WON'T WORK IN PRODUCTION
+    """
+    await bot.send_message(
+        chat_id = message.chat.id,
+        text = f"[{format([_point for _point in bot.state.get_points_list()])}]"
+    )
+
+
+async def debug__get_current_point_data(message: AIOGramTypes.Message):
+    """
+    DEBUG ONLY!!! WON'T WORK IN PRODUCTION
+    """
+    await bot.send_message(
+        chat_id = message.chat.id,
+        text = format(bot.state.get_point_data())
+    )
 
 
 async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
@@ -80,33 +104,31 @@ async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
 
 
 async def excursion_loop(message: AIOGramTypes.Message):
-    if (bot.state.get(StateField.CURRENT_STEP) == 0):
-        points_list = database.get_points_list(bot.state.get(StateField.LOCATION))
+    if (is_first_step(bot.state.get_current_step())):
+        points_list = database.get_points_list(bot.state.get_location())
         bot.state.set_points_list(points_list)
+
+    current_point_data = bot.state.get_point_data()
 
     await bot.send_message_with_photo(
         chat_id = message.chat.id,
-        photo = AIOGramTypes.InputFile(bot.state.get_current_step_data("picture")),
-        text = bot.state.get_current_step_data("name"),
+        photo = AIOGramTypes.InputFile(current_point_data.picture),
+        text = current_point_data.name,
         reply_markup = remove_keyboard()
     )
 
     await bot.send_message(
         chat_id = message.chat.id,
-        text = bot.state.get_current_step_data("description"),
+        text = current_point_data.description,
         reply_markup = Keyboard.MENU_NEXT__TO_HUB
     )
 
-    point_links = bot.state.get_current_step_data("links")
-
-    if(len(point_links) == 0):
+    if(has_extra_links(current_point_data.links)):
         return
-
-    extra_links = Reply.EXTRA_LINKS + ", ".join(point_links)
 
     await bot.send_message(
         chat_id = message.chat.id,
-        text = extra_links,
+        text = f"{Reply.EXTRA_LINKS} {assemble_links_line(current_point_data.links)}",
         disable_web_page_preview = True
     )
 
@@ -119,7 +141,14 @@ async def end_of_excursion(message: AIOGramTypes.Message):
 
 
 bot.add_command_handler(command = ["start", "hub"], handler = start)
-bot.add_command_handler(command = ["get_location"], handler = get_location)
+
+# Команды для проверки состояния приложения в runtime.
+# Недоступны, если приложения находится в режиме `production` - `src/bot/env.py - IS_PRODUCTION = true`
+if(not IS_PRODUCTION):
+    bot.add_command_handler(command = ["get_location"], handler = debug__get_location)
+    bot.add_command_handler(command = ["get_location_data"], handler = debug__get_location_data)
+    bot.add_command_handler(command = ["get_point_data"], handler = debug__get_current_point_data)
+
 bot.add_command_handler(command = [], handler = text_handler)
 
 bot.add_inline_keyboard_handler(handler = inline_keyboard_handler)

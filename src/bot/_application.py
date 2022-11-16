@@ -149,5 +149,7 @@ class Application:
             reply_markup = reply_markup,
         )
 
+
+    @staticmethod
     def is_private_message(chat_type: str) -> bool:
         return chat_type == "private"

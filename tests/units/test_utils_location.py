@@ -1,7 +1,7 @@
 from src.bot.constants.locations import LOCATION_LABELS, LOCATION_VALUES
+from src.bot.types.location import LocationProps
 from src.bot.utils.location import (format_location_for_database,
-                                    get_location_label, get_location_value,
-                                    is_valid_location)
+                                    get_location_property, is_valid_location)
 
 
 def test__is_valid_location():
@@ -30,29 +30,27 @@ def test__format_location_for_database():
     assert format_location_for_database("building1") == None
     assert format_location_for_database("stret") == None
 
-def test__get_location_label():
-    assert get_location_label("street") == "Улица"
-    assert get_location_label("street ") == "Улица"
-    assert get_location_label("building_1") == "Корпус 1"
-    assert get_location_label("building_1 ") == "Корпус 1"
-    assert get_location_label("Улица") == "Улица"
-    assert get_location_label(" Улица") == "Улица"
-    assert get_location_label("Корпус 1") == "Корпус 1"
-    assert get_location_label("Корпус 1 ") == "Корпус 1"
+def test__get_location_property():
+    assert get_location_property("street", LocationProps.label) == "Улица"
+    assert get_location_property("street ", LocationProps.label) == "Улица"
+    assert get_location_property("building_1", LocationProps.label) == "Корпус 1"
+    assert get_location_property("building_1 ", LocationProps.label) == "Корпус 1"
+    assert get_location_property("Улица", LocationProps.label) == "Улица"
+    assert get_location_property(" Улица", LocationProps.label) == "Улица"
+    assert get_location_property("Корпус 1", LocationProps.label) == "Корпус 1"
+    assert get_location_property("Корпус 1 ", LocationProps.label) == "Корпус 1"
 
-    assert get_location_label("stret") == None
-    assert get_location_label("Корпус1") == None
+    assert get_location_property("stret", LocationProps.label) == None
+    assert get_location_property("Корпус1", LocationProps.label) == None
 
+    assert get_location_property("Улица", LocationProps.value) == "street"
+    assert get_location_property("Улица ", LocationProps.value) == "street"
+    assert get_location_property("Корпус 1", LocationProps.value) == "building_1"
+    assert get_location_property(" Корпус 1", LocationProps.value) == "building_1"
+    assert get_location_property("street", LocationProps.value) == "street"
+    assert get_location_property("street ", LocationProps.value) == "street"
+    assert get_location_property("building_1", LocationProps.value) == "building_1"
+    assert get_location_property("building_1 ", LocationProps.value) == "building_1"
 
-def test__get_location_value():
-    assert get_location_value("Улица") == "street"
-    assert get_location_value("Улица ") == "street"
-    assert get_location_value("Корпус 1") == "building_1"
-    assert get_location_value(" Корпус 1") == "building_1"
-    assert get_location_value("street") == "street"
-    assert get_location_value("street ") == "street"
-    assert get_location_value("building_1") == "building_1"
-    assert get_location_value("building_1 ") == "building_1"
-
-    assert get_location_label("stret") == None
-    assert get_location_label("Корпус1") == None
+    assert get_location_property("stret", LocationProps.value) == None
+    assert get_location_property("Корпус1", LocationProps.value) == None
