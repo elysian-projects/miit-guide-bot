@@ -154,5 +154,7 @@ class Application:
         except Exception as e:
             print(repr(e))
 
+
+    @staticmethod
     def is_private_message(chat_type: str) -> bool:
         return chat_type == "private"
