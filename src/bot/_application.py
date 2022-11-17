@@ -6,6 +6,7 @@ from aiogram import types as AIOGramTypes
 from .entities.state_manager import StateManager
 from .types.message import ParseMode
 from .utils.config import Config, create_config, get_config_path
+from .utils.media_adapters import create_photo_array
 
 
 class Application:
@@ -149,6 +150,43 @@ class Application:
             reply_markup = reply_markup,
         )
 
+    async def send_multiple_pictures(
+        self,
+        chat_id: int,
+        media: List[str],
+        message_thread_id: int | None = None,
+        disable_notification: bool | None = None,
+        protect_content: bool | None = None,
+        reply_to_message_id: int | None = None,
+        allow_sending_without_reply: bool | None = None,
+    ) -> None:
+        """
+        (Асинхронный метод) Отправляет несколько картинок пользователю
+
+        :param chat_id: id чата, куда нужно отправить сообщение
+        :param media: массив JSON, описывающий фото для отправки
+        :param message_thread_id: идентификатор цепочки сообщений
+        :param disable_notification: отправить сообщение в "бесшумном" режиме
+        :param protect_content: запретить пересылать и скачивать отправленный контент
+        :param reply_to_message_id: id сообщения, если команда является ответом
+        :param allow_sending_without_reply: отправить, даже если нет сообщения, на которое нужно ответить
+
+        @see https://core.telegram.org/bots/api#sendmediagroup
+        """
+
+        try:
+            await self.__bot.send_media_group(
+                chat_id = chat_id,
+                media = create_photo_array(media),
+                message_thread_id = message_thread_id,
+                disable_notification = disable_notification,
+                protect_content = protect_content,
+                reply_to_message_id = reply_to_message_id,
+                allow_sending_without_reply = allow_sending_without_reply
+            )
+
+        except Exception as e:
+            print(repr(e))
 
     @staticmethod
     def is_private_message(chat_type: str) -> bool:
