@@ -17,7 +17,10 @@ async def start(message: AIOGramTypes.Message):
 
     await bot.send_message_with_photo(
         chat_id = message.chat.id,
-        media = "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159",
+        photo = "https://rut-miit.ru/content/opengraph-image_1_1920x1280.jpg?id_wm=884159",
+
+        # Удаление `menu` клавиатуры, которая может остаться от предыдущего сеанса взаимодействия с приложением
+        reply_markup = remove_keyboard()
     )
 
     await bot.send_message(
@@ -109,8 +112,9 @@ async def excursion_loop(message: AIOGramTypes.Message):
 
     await bot.send_message_with_photo(
         chat_id = message.chat.id,
-        media = bot.state.get_current_step_data("picture"),
+        photo = AIOGramTypes.InputFile(current_point_data.picture),
         text = current_point_data.name,
+        reply_markup = remove_keyboard()
     )
 
     await bot.send_message(
