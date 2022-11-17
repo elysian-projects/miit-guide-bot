@@ -1,7 +1,8 @@
 from aiogram import types as AIOGramTypes
+from typing import List
 
 
-def create_array_photo(media) -> list:
+def create_array_photo(media: List[str]) -> List:
     media_group = []
 
     for photo in media:
