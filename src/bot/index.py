@@ -123,7 +123,7 @@ async def excursion_loop(message: AIOGramTypes.Message):
         reply_markup = Keyboard.MENU_NEXT__TO_HUB
     )
 
-    if(has_extra_links(current_point_data.links)):
+    if(not has_extra_links(current_point_data.links)):
         return
 
     await bot.send_message(
