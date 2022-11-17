@@ -165,7 +165,7 @@ class Application:
 
         :param chat_id: id чата, куда нужно отправить сообщение
         :param media: массив JSON, описывающий фото для отправки
-        :param message_thread_id: идентификатор ветки сообщений (темы) форума; только для супергрупп форума
+        :param message_thread_id: идентификатор цепочки сообщений
         :param disable_notification: отправить сообщение в "бесшумном" режиме
         :param protect_content: запретить пересылать и скачивать отправленный контент
         :param reply_to_message_id: id сообщения, если команда является ответом
