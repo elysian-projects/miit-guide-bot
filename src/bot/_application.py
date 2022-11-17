@@ -6,7 +6,7 @@ from aiogram import types as AIOGramTypes
 from .entities.state_manager import StateManager
 from .types.message import ParseMode
 from .utils.config import Config, create_config, get_config_path
-from .utils.media_adapters import create_array_photo
+from .utils.media_adapters import create_photo_array
 
 
 class Application:
@@ -177,7 +177,7 @@ class Application:
         try:
             await self.__bot.send_media_group(
                 chat_id = chat_id,
-                media = create_array_photo(media),
+                media = create_photo_array(media),
                 message_thread_id = message_thread_id,
                 disable_notification = disable_notification,
                 protect_content = protect_content,

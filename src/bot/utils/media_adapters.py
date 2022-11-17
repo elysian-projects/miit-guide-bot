@@ -2,7 +2,7 @@ from aiogram import types as AIOGramTypes
 from typing import List
 
 
-def create_array_photo(media: List[str]) -> List:
+def create_photo_array(media: List[str]) -> List[AIOGramTypes.InputMediaPhoto]:
     media_group = []
 
     for photo in media:
