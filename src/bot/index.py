@@ -123,14 +123,13 @@ async def excursion_loop(message: AIOGramTypes.Message):
         reply_markup = Keyboard.MENU_NEXT__TO_HUB
     )
 
-    if(not has_extra_links(current_point_data.links)):
-        return
+    if(has_extra_links(current_point_data.links)):
+        await bot.send_message(
+            chat_id = message.chat.id,
+            text = get_more_links_message(current_point_data.links),
+            disable_web_page_preview = True
+        )
 
-    await bot.send_message(
-        chat_id = message.chat.id,
-        text = f"{Reply.EXTRA_LINKS} {assemble_links_line(current_point_data.links)}",
-        disable_web_page_preview = True
-    )
 
 async def end_of_excursion(message: AIOGramTypes.Message):
     await bot.send_message(
