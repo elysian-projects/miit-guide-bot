@@ -16,14 +16,6 @@ def is_valid_location(location: str) -> bool:
         or location.strip() in LOCATION_LABELS
 
 
-#TODO: удалить к релизу
-def format_location_for_database(location: str) -> str | None:
-    """
-    :deprecated: использовать `format_point_data`
-    """
-    return get_location_property(location, LocationProps.value)
-
-
 def format_point_data(data: object) -> Point:
         """
         Приводит переданный объект с полями к типу данного класса
