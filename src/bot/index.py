@@ -13,7 +13,9 @@ database = Database()
 
 
 async def start(message: AIOGramTypes.Message):
-    bot.state.reset_data()
+    bot.state.add_user(message.chat.id)
+
+    bot.state.reset_data(message.chat.id)
 
     await bot.send_message_with_photo(
         chat_id = message.chat.id,
@@ -40,10 +42,10 @@ async def text_handler(message: AIOGramTypes.Message):
         return
 
     if(message.text == Button.NEXT):
-        bot.state.next_step()
+        bot.state.next_step(message.chat.id)
         await excursion_loop(message)
 
-        if(bot.state.is_end):
+        if(bot.state.get_is_end(message.chat.id)):
             await end_of_excursion(message)
 
         return
@@ -57,7 +59,7 @@ async def debug__get_location(message: AIOGramTypes.Message):
     """
     await bot.send_message(
         chat_id = message.chat.id,
-        text = repr(bot.state.get_location())
+        text = repr(bot.state.get_location(message.chat.id))
     )
 
 
@@ -67,7 +69,7 @@ async def debug__get_location_data(message: AIOGramTypes.Message):
     """
     await bot.send_message(
         chat_id = message.chat.id,
-        text = f"[{format([_point for _point in bot.state.get_points_list()])}]"
+        text = f"[{format([_point for _point in bot.state.get_points_list(message.chat.id)])}]"
     )
 
 
@@ -77,7 +79,7 @@ async def debug__get_current_point_data(message: AIOGramTypes.Message):
     """
     await bot.send_message(
         chat_id = message.chat.id,
-        text = format(bot.state.get_point_data())
+        text = format(bot.state.get_point_data(message.chat.id))
     )
 
 
@@ -86,12 +88,12 @@ async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
         if(call.message):
             user_message = call.data
 
-            if(not bot.state.is_location_chosen() and is_valid_location(user_message)):
+            if(not bot.state.is_location_chosen(call.message.chat.id) and is_valid_location(user_message)):
                 await call.message.edit_reply_markup(reply_markup = None)
 
-                location = format_location_for_database(user_message)
+                location = format_point_data(user_message)
 
-                bot.state.set_location(location)
+                bot.state.set_location(location, call.message.chat.id)
 
                 await bot.send_message(
                     chat_id = call.message.chat.id,
@@ -106,9 +108,9 @@ async def inline_keyboard_handler(call: AIOGramTypes.CallbackQuery):
 async def excursion_loop(message: AIOGramTypes.Message):
     if (is_first_step(bot.state.get_current_step())):
         points_list = database.get_points_list(bot.state.get_location())
-        bot.state.set_points_list(points_list)
+        bot.state.set_points_list(points_list, message.chat.id)
 
-    current_point_data = bot.state.get_point_data()
+    current_point_data = bot.state.get_point_data(message.chat.id)
 
     await bot.send_message_with_photo(
         chat_id = message.chat.id,

@@ -36,6 +36,7 @@ class Application:
         print("Running bot application...")
         executor.start_polling(self.__dispatcher, skip_updates = True)
 
+
     def add_command_handler(self, command: List[str], handler: Awaitable):
         """
         Подписывает функции на определённый список команд
@@ -48,6 +49,7 @@ class Application:
         @self.__dispatcher.message_handler(commands = command or None)
         async def _(message: AIOGramTypes.Message):
             await handler(message)
+
 
     def add_inline_keyboard_handler(self, handler: Callable) -> None:
         """
